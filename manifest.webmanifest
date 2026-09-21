@@ -1,0 +1,11 @@
+{
+  "name": "Naad Studio",
+  "short_name": "Naad",
+  "description": "Browser music studio — create, tune, video, publish. Demo MVP.",
+  "start_url": "/naad-studio/",
+  "scope": "/naad-studio/",
+  "display": "standalone",
+  "background_color": "#0c0614",
+  "theme_color": "#1a0b2e",
+  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}
