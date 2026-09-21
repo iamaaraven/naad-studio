@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#1a0b2e"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Naad"/>
+<meta name="description" content="Naad — browser music studio. Create, tune, lyric video, publish prep. Demo MVP."/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="icon.svg"/>
+<link rel="icon" href="icon.svg"/>
+<title>Naad Studio — Create · Tune · Publish</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="left">
+        <div class="mark">♪</div>
+        <div>
+          <h1>Naad</h1>
+          <p class="tag">Browser music studio</p>
+        </div>
+      </div>
+      <div class="badge">DEMO</div>
+    </div>
+    <div class="steps" role="tablist">
+      <button type="button" class="step-pill on" data-step="create">1 · Create</button>
+      <button type="button" class="step-pill" data-step="instruments">2 · Instruments</button>
+      <button type="button" class="step-pill" data-step="tune">3 · Tune</button>
+      <button type="button" class="step-pill" data-step="video">4 · Video</button>
+      <button type="button" class="step-pill" data-step="publish">5 · Publish</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- CREATE -->
+    <section id="view-create" class="panel">
+      <h2>Create your song</h2>
+      <p class="sub">Rule-based AI-assisted arrangement from genre + mood — not a paid Suno API. Honest demo, still musical.</p>
+      <label for="title">Title</label>
+      <input id="title" type="text" placeholder="e.g. Midnight Monsoon" maxlength="80" value="Midnight Monsoon"/>
+      <label>Genre</label>
+      <div class="chips">
+        <button type="button" class="chip on" data-genre="Bollywood">Bollywood</button>
+        <button type="button" class="chip" data-genre="Pop">Pop</button>
+        <button type="button" class="chip" data-genre="Hip-hop">Hip-hop</button>
+        <button type="button" class="chip" data-genre="EDM">EDM</button>
+        <button type="button" class="chip" data-genre="Folk">Folk</button>
+        <button type="button" class="chip" data-genre="Lo-fi">Lo-fi</button>
+      </div>
+      <label>Mood</label>
+      <div class="chips">
+        <button type="button" class="chip on" data-mood="Joyful">Joyful</button>
+        <button type="button" class="chip" data-mood="Romantic">Romantic</button>
+        <button type="button" class="chip" data-mood="Melancholy">Melancholy</button>
+        <button type="button" class="chip" data-mood="Energetic">Energetic</button>
+        <button type="button" class="chip" data-mood="Chill">Chill</button>
+        <button type="button" class="chip" data-mood="Epic">Epic</button>
+      </div>
+      <label for="bpm">Tempo · <span id="bpmVal">100</span> BPM</label>
+      <input id="bpm" type="range" min="70" max="160" value="100"/>
+      <label for="lyrics">Lyrics</label>
+      <textarea id="lyrics" placeholder="Write a verse and chorus…">Rain on the balcony glass
+Your laugh in the afterglow
+City lights blur as we pass
+Heartbeat matching the tempo
+
+Hold the night a little longer
+Sing the storm into a song
+We are louder when we're stronger
+Midnight monsoon, come along</textarea>
+      <button type="button" class="btn" id="btnGenerate">Generate arrangement</button>
+      <div id="structureBox" class="hidden">
+        <p class="sub" id="arrMeta" style="margin-top:14px"></p>
+        <div class="structure" id="structure"></div>
+        <button type="button" class="btn ghost" id="btnToInstruments">Next · Instruments →</button>
+      </div>
+    </section>
+
+    <!-- INSTRUMENTS -->
+    <section id="view-instruments" class="panel hidden">
+      <h2>Global instruments</h2>
+      <p class="sub">Toggle layers. Synth/oscillator voices via Web Audio — no huge sample packs.</p>
+      <div class="transport">
+        <button type="button" class="btn sm" id="btnPlay">▶ Play loop</button>
+        <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
+      </div>
+      <div class="layers">
+        <div class="layer"><div class="ico">🎹</div><div><div class="ttl">Piano</div><div class="hint">Triad keys</div></div><button type="button" class="toggle on" data-layer="piano" aria-pressed="true"></button></div>
+        <div class="layer"><div class="ico">🎸</div><div><div class="ttl">Guitar-ish</div><div class="hint">Pluck / saw</div></div><button type="button" class="toggle" data-layer="guitar" aria-pressed="false"></button></div>
+        <div class="layer"><div class="ico">🔊</div><div><div class="ttl">Bass</div><div class="hint">Sub + square</div></div><button type="button" class="toggle on" data-layer="bass" aria-pressed="true"></button></div>
+        <div class="layer"><div class="ico">🥁</div><div><div class="ttl">Drums</div><div class="hint">Kick / snare / hat</div></div><button type="button" class="toggle on" data-layer="drums" aria-pressed="true"></button></div>
+        <div class="layer"><div class="ico">🪕</div><div><div class="ttl">Sitar-ish</div><div class="hint">Drone + bend</div></div><button type="button" class="toggle" data-layer="sitar" aria-pressed="false"></button></div>
+        <div class="layer"><div class="ico">🪶</div><div><div class="ttl">Flute-ish</div><div class="hint">Airy sine</div></div><button type="button" class="toggle" data-layer="flute" aria-pressed="false"></button></div>
+        <div class="layer"><div class="ico">🌊</div><div><div class="ttl">Synth pad</div><div class="hint">Soft wash</div></div><button type="button" class="toggle" data-layer="pad" aria-pressed="false"></button></div>
+        <div class="layer"><div class="ico">⚡</div><div><div class="ttl">Synth lead</div><div class="hint">Detuned saw</div></div><button type="button" class="toggle" data-layer="synth" aria-pressed="false"></button></div>
+        <div class="layer"><div class="ico">🪘</div><div><div class="ttl">Djembe-ish</div><div class="hint">Hand percussion</div></div><button type="button" class="toggle" data-layer="djembe" aria-pressed="false"></button></div>
+      </div>
+      <div class="hint-box"><strong>Tip:</strong> Genre presets enable fitting layers automatically when you generate.</div>
+    </section>
+
+    <!-- TUNE -->
+    <section id="view-tune" class="panel hidden">
+      <h2>Tune / Autotune</h2>
+      <p class="sub">Demo tune effect: playbackRate quantization toward scale + wet/dry. Not studio-grade Melodyne.</p>
+      <label>Voice file (optional)</label>
+      <div class="file-row">
+        <input id="voiceFile" type="file" accept="audio/*"/>
+      </div>
+      <audio id="voiceAudio" class="hidden" controls style="width:100%;margin-top:8px"></audio>
+      <div class="file-row" style="margin-top:12px">
+        <button type="button" class="btn sm" id="btnMic">Use microphone</button>
+        <span class="tag" id="micStatus">Mic off</span>
+      </div>
+      <div class="file-row" style="margin-top:10px">
+        <button type="button" class="btn sm" id="btnVoicePlay">Play voice</button>
+        <button type="button" class="btn sm ghost" id="btnVoiceStop" style="margin-top:0">Stop voice</button>
+      </div>
+      <label for="tuneMix">Tune mix (wet) · <span id="tuneMixVal">70%</span></label>
+      <input id="tuneMix" type="range" min="0" max="1" step="0.01" value="0.7"/>
+      <label for="songTune">Song tune (instrumental detune) · <span id="songTuneVal">0.00</span></label>
+      <div class="slider-row">
+        <input id="songTune" type="range" min="-1" max="1" step="0.01" value="0"/>
+      </div>
+      <div class="hint-box"><strong>Demo tune:</strong> pulls voice playbackRate toward scale color and blends wet/dry. Mic path uses a peaking EQ “tuned” presence. Labelled as a simplified browser effect.</div>
+    </section>
+
+    <!-- VIDEO -->
+    <section id="view-video" class="panel hidden">
+      <h2>Lyric video</h2>
+      <p class="sub">Animated background by mood/genre, scrolling lyrics synced loosely to BPM, title card.</p>
+      <canvas id="lyricCanvas" width="540" height="960" aria-label="Lyric video preview"></canvas>
+      <button type="button" class="btn" id="btnPreviewVideo">Preview animation</button>
+      <button type="button" class="btn ghost" id="btnExportVideo">Download WebM (or fallback)</button>
+      <button type="button" class="btn ghost" id="btnCoverPng">Download cover PNG</button>
+      <div id="videoTip" class="hint-box hidden">
+        <strong>Frame sequence tip:</strong> If WebM isn’t supported, use the cover PNG + lyrics, then record your screen or finish in CapCut / iMovie. Naad is a prep studio, not a full NLE.
+      </div>
+    </section>
+
+    <!-- PUBLISH -->
+    <section id="view-publish" class="panel hidden">
+      <h2>Publish &amp; monetize</h2>
+      <p class="sub">Naad does <strong style="color:var(--text)">not</strong> upload for you or pay you — it prepares assets and guides. You need your own accounts.</p>
+      <div class="check"><input type="checkbox" id="c1"/><div><div class="t">YouTube</div><div class="d">Create a channel, upload lyric/WebM, enable monetization when eligible (watch time + subscribers rules).</div></div></div>
+      <div class="check"><input type="checkbox" id="c2"/><div><div class="t">Instagram / Reels</div><div class="d">Post vertical clip; use suggested hashtags; Professional account for insights.</div></div></div>
+      <div class="check"><input type="checkbox" id="c3"/><div><div class="t">Spotify for Artists</div><div class="d">Claim profile after a distributor delivers your track — Naad cannot push to Spotify directly.</div></div></div>
+      <div class="check"><input type="checkbox" id="c4"/><div><div class="t">DistroKid / TuneCore</div><div class="d">Pay their fees, upload WAV/MP3 + cover art yourself. Follow their content &amp; rights rules.</div></div></div>
+      <div class="pack-preview" id="packPreview">Generate a song to build your release pack…</div>
+      <button type="button" class="btn" id="btnPackJson">Download release pack (.json)</button>
+      <button type="button" class="btn ghost" id="btnPackTxt">Download release pack (.txt)</button>
+    </section>
+  </main>
+
+  <div class="disclaimer">
+    <strong>Demo studio.</strong> Not affiliated with Spotify, YouTube, Apple, DistroKid, or TuneCore.
+    Autotune and AI arrangement are simplified browser demos. Monetization requires your own platform accounts and compliance with their rules.
+  </div>
+</div>
+
+<nav class="nav" aria-label="Primary">
+  <button type="button" class="on" data-step="create"><span class="ico">✨</span>Create</button>
+  <button type="button" data-step="instruments"><span class="ico">🎛</span>Play</button>
+  <button type="button" data-step="tune"><span class="ico">🎚</span>Tune</button>
+  <button type="button" data-step="video"><span class="ico">🎬</span>Video</button>
+  <button type="button" data-step="publish"><span class="ico">🚀</span>Publish</button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="arrange.js"></script>
+<script src="audio-engine.js"></script>
+<script src="video.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
